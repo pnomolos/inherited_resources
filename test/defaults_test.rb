@@ -55,7 +55,7 @@ class DefaultsTest < ActionController::TestCase
 
   def test_update_the_requested_object
     Malarz.expects(:find_by_slug).with('forty_two').returns(mock_painter)
-    mock_painter.expects(:update_attributes).with({'these' => 'params'}).returns(true)
+    mock_painter.expects(:update).with({'these' => 'params'}).returns(true)
     put :update, :id => 'forty_two', :malarz => {:these => 'params'}
     assert_equal mock_painter, assigns(:malarz)
   end
@@ -122,7 +122,7 @@ class DefaultsNamespaceTest < ActionController::TestCase
 
   def test_update_the_professor
     Professor.expects(:find_by_slug).with('forty_two').returns(mock_professor)
-    mock_professor.expects(:update_attributes).with({'these' => 'params'}).returns(true)
+    mock_professor.expects(:update).with({'these' => 'params'}).returns(true)
     put :update, :id => 'forty_two', :professor => {:these => 'params'}
     assert_equal mock_professor, assigns(:professor)
   end

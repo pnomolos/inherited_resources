@@ -225,7 +225,7 @@ class UpdateActionBaseTest < ActionController::TestCase
 
   def test_update_the_requested_object
     User.expects(:find).with('42').returns(mock_user)
-    mock_user.expects(:update_attributes).with({'these' => 'params'}).returns(true)
+    mock_user.expects(:update).with({'these' => 'params'}).returns(true)
     put :update, :id => '42', :user => {:these => 'params'}
     assert_equal mock_user, assigns(:user)
   end
@@ -233,14 +233,14 @@ class UpdateActionBaseTest < ActionController::TestCase
   def test_update_the_requested_object_when_setted_role
     @controller.class.send(:with_role, :admin)
     User.expects(:find).with('42').returns(mock_user)
-    mock_user.expects(:update_attributes).with({'these' => 'params'}, {:as => :admin}).returns(true)
+    mock_user.expects(:update).with({'these' => 'params'}, {:as => :admin}).returns(true)
     put :update, :id => '42', :user => {:these => 'params'}
     assert_equal mock_user, assigns(:user)
     @controller.class.send(:with_role, nil)
   end
 
   def test_redirect_to_the_updated_user
-    User.stubs(:find).returns(mock_user(:update_attributes => true))
+    User.stubs(:find).returns(mock_user(:update => true))
     @controller.expects(:resource_url).returns('http://test.host/')
     put :update
     assert_redirected_to 'http://test.host/'
@@ -248,33 +248,33 @@ class UpdateActionBaseTest < ActionController::TestCase
 
   def test_redirect_to_the_users_list_if_show_undefined
     @controller.class.send(:actions, :all, :except => :show)
-    User.stubs(:find).returns(mock_user(:update_attributes => true))
+    User.stubs(:find).returns(mock_user(:update => true))
     @controller.expects(:collection_url).returns('http://test.host/')
     put :update
     assert_redirected_to 'http://test.host/'
   end
 
   def test_show_flash_message_when_success
-    User.stubs(:find).returns(mock_user(:update_attributes => true))
+    User.stubs(:find).returns(mock_user(:update => true))
     put :update
     assert_equal flash[:notice], 'User was successfully updated.'
   end
 
   def test_show_flash_message_with_javascript_request_when_success
-    User.stubs(:find).returns(mock_user(:update_attributes => true))
+    User.stubs(:find).returns(mock_user(:update => true))
     post :update, :format => :js
     assert_equal flash[:notice], 'User was successfully updated.'
   end
 
   def test_render_edit_template_when_user_cannot_be_saved
-    User.stubs(:find).returns(mock_user(:update_attributes => false, :errors => {:some => :error}))
+    User.stubs(:find).returns(mock_user(:update => false, :errors => {:some => :error}))
     put :update
     assert_response :success
     assert_equal "Edit HTML", @response.body.strip
   end
 
   def test_dont_show_flash_message_when_user_cannot_be_saved
-    User.stubs(:find).returns(mock_user(:update_attributes => false, :errors => {:some => :error}))
+    User.stubs(:find).returns(mock_user(:update => false, :errors => {:some => :error}))
     put :update
     assert flash.empty?
   end

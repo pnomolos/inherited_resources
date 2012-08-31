@@ -66,7 +66,7 @@ class NestedModelWithShallowTest < ActionController::TestCase
 
   def test_expose_a_update_group_with_speciality
     should_find_parents
-    mock_group.expects(:update_attributes).with('these' => 'params').returns(true)
+    mock_group.expects(:update).with('these' => 'params').returns(true)
     post :update, :id => 'forty_two', :group => {'these' => 'params'}
     assert_equal mock_group, assigns(:group)
   end
