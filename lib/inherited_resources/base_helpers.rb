@@ -75,7 +75,7 @@ module InheritedResources
       #   end
       #
       def update_resource(object, attributes)
-        object.updates(*attributes)
+        object.update(*attributes)
       end
 
       # Handle the :destroy method for the resource. Overwrite it to call your
